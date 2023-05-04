@@ -12,8 +12,16 @@ Convolutional Neural Networks (CNNs) have advanced existing medical systems for 
 <div style="text-align: center">
 <img src="images/structure.png" title="MedViT-S" height="75%" width="75%">
 </div>
-Figure 1. The overall hierarchical architecture of MedViT.</center>
+Figure 2. The overall hierarchical architecture of MedViT.</center>
 
+
+## Visualization
+
+Visual inspection of MedViT-T and ResNet-18 using Grad-CAM on MedMNIST-2D datasets. The green rectangles is
+used to show a specific part of the image that contains information relevant to the diagnosis or analysis of a medical condition,
+where the superiority of our proposed method can be clearly seen.
+![MedViT-V](images/visualize.png)
+<center>Figure 3. The heat maps of the output feature from ResNet and MedViT.</center>
 
 ## Citation
 If you find this project useful in your research, please consider cite:
