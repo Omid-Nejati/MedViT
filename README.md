@@ -22,6 +22,14 @@ Figure 1. Comparison between MedViTs and the baseline ResNets, in terms of avera
 </div>
 Figure 2. The overall hierarchical architecture of MedViT.</center>
 
+## ImageNet Pre-train
+We provide a series of MedViT models pretrained on ILSVRC2012 ImageNet-1K dataset.
+
+| Model      |   Dataset   | Resolution |  ckpt   |  
+|------------|:-----------:|:----------:|:--------:|
+| MedViT_small | ImageNet-1K |    224   | Soon | 
+| MedViT_base | ImageNet-1K |    224    | Soon | 
+| MedViT_large | ImageNet-1K |    224   | Soon | 
 
 ## Visualization
 
