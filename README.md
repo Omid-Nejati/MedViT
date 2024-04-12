@@ -25,11 +25,11 @@ Figure 2. The overall hierarchical architecture of MedViT.</center>
 ## ImageNet Pre-train
 We provide a series of MedViT models pretrained on ILSVRC2012 ImageNet-1K dataset.
 
-| Model      |   Dataset   | Resolution |  ckpt   |  
-|------------|:-----------:|:----------:|:--------:|
-| MedViT_small | ImageNet-1K |    224   | Soon | 
-| MedViT_base | ImageNet-1K |    224    | Soon | 
-| MedViT_large | ImageNet-1K |    224   | Soon | 
+| Model      |   Dataset   | Resolution  | Acc@1 | ckpt   |  
+|------------|:-----------:|:----------:|:--------:|:--------:|
+| MedViT_small | ImageNet-1K |    224   | 83.70 | [ckpt](https://drive.google.com/file/d/14wcH5cm8P63cMZAUHA1lhhJgMVOw_5VQ/view?usp=sharing) | 
+| MedViT_base | ImageNet-1K |    224    | 83.92 |[ckpt](https://drive.google.com/file/d/1Lrfzjf3CK7YOztKa8D6lTUZjYJIiT7_s/view?usp=sharing) | 
+| MedViT_large | ImageNet-1K |    224   | 83.96 |[ckpt](https://drive.google.com/file/d/1sU-nLpYuCI65h7MjFJKG0yphNAlUFSKG/view?usp=sharing) | 
 
 ## Visualization
 
