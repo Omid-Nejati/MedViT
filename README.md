@@ -1,5 +1,8 @@
 # MedViT: A Robust Vision Transformer for Generalized Medical Image Classification
 
+[![Paper](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2302.09462)
+[![Paper](https://img.shields.io/badge/Elsevier-CIBM-blue)](https://doi.org/10.1016/j.compbiomed.2023.106791)
+
 This repo is the official implementation of ["MedViT: A Robust Vision Transformer for Generalized Medical Image Classification"](https://arxiv.org/abs/2302.09462).
 
 ## Train & Test --- Prepare data
