@@ -6,8 +6,8 @@
 This repo is the official implementation of ["MedViT: A Robust Vision Transformer for Generalized Medical Image Classification"](https://arxiv.org/abs/2302.09462).
 
 ## Train & Test --- Prepare data
-- (beginner friendly🍉) We will soon provide new code with a custom dataset and pre-trained weights on Imagenet. 
-- (New version) We have updated the code ["Instructions.ipynb"](https://github.com/Omid-Nejati/MedViT/blob/main/Instructions.ipynb), incorporating the installation requirements and adding a section on adversarial robustness. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Omid-Nejati/MedViT/blob/main/Instructions.ipynb)
+- (beginner friendly🍉) Custom dataset will provided soon. 
+- (New version) Updated the code ["Instructions.ipynb"](https://github.com/Omid-Nejati/MedViT/blob/main/Instructions.ipynb), added the installation requirements and adversarial robustness. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Omid-Nejati/MedViT/blob/main/Instructions.ipynb)
 - (Previous version) Please go to ["Colab_MedViT.ipynb"](https://github.com/Omid-Nejati/MedViT/blob/main/Colab_MedViT.ipynb) for complete detail on dataset preparation and Train/Test procedure. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Omid-Nejati/MedViT/blob/main/Colab_MedViT.ipynb)
 
 ## Introduction
