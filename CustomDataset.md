@@ -34,12 +34,12 @@ To train MedViT-small on ImageNet  using 8 gpus for 300 epochs, run:
 
 ```shell
 cd CustomDataset/
-bash train.sh 8 --model MedViT-small  --batch-size 30 --lr 5e-4 --warmup-epochs 20 --weight-decay 0.1 --data-path your_data_path
+bash train.sh 8 --model MedViT_small  --batch-size 30 --lr 5e-4 --warmup-epochs 20 --weight-decay 0.1 --data-path your_data_path
 ```
 Finetune MedViT-small with 384x384 input size for 30 epochs, run:
 ```shell
 cd CustomDataset/
-bash train.sh 8 --model MedViT-small --batch-size 30 --lr 5e-6 --warmup-epochs 0 --weight-decay 1e-8 --epochs 30 --sched step --decay-epochs 60 --input-size 384 --resume ../checkpoints/MedViT_small_im1k.pth --finetune --data-path your_data_path 
+bash train.sh 8 --model MedViT_small --batch-size 30 --lr 5e-6 --warmup-epochs 0 --weight-decay 1e-8 --epochs 30 --sched step --decay-epochs 60 --input-size 384 --resume ../checkpoints/MedViT_small_im1k.pth --finetune --data-path your_data_path 
 
 ```
 
@@ -48,5 +48,5 @@ bash train.sh 8 --model MedViT-small --batch-size 30 --lr 5e-6 --warmup-epochs 0
 To evaluate the performance of MedViT-small on ImageNet using 8 gpus, run:
 ```shell
 cd classification/
-bash train.sh 8 --model MedViT-small --batch-size 30 --lr 5e-4 --warmup-epochs 20 --weight-decay 0.1 --data-path your_data_path --resume ../checkpoints/MedViT_small_im1k.pth --eval
+bash train.sh 8 --model MedViT_small --batch-size 30 --lr 5e-4 --warmup-epochs 20 --weight-decay 0.1 --data-path your_data_path --resume ../checkpoints/MedViT_small_im1k.pth --eval
 ```
