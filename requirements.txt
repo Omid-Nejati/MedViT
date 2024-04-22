@@ -5,6 +5,7 @@ numpy
 pandas
 scikit-learn
 scikit-image
+fvcore
 tqdm
 Pillow
 fire
