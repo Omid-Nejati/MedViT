@@ -47,6 +47,6 @@ bash train.sh 8 --model MedViT_small --batch-size 30 --lr 5e-6 --warmup-epochs 0
 
 To evaluate the performance of MedViT-small on ImageNet using 8 gpus, run:
 ```shell
-cd classification/
+cd CustomDataset/
 bash train.sh 8 --model MedViT_small --batch-size 30 --lr 5e-4 --warmup-epochs 20 --weight-decay 0.1 --data-path your_data_path --resume ../checkpoints/MedViT_small_im1k.pth --eval
 ```
