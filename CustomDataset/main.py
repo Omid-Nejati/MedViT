@@ -18,7 +18,7 @@ from engine import train_one_epoch, evaluate
 from losses import DistillationLoss
 from samplers import RASampler
 import utils
-import ../MedViT 
+import MedViT 
 
 def get_args_parser():
     parser = argparse.ArgumentParser('MedViT training and evaluation script', add_help=False)
