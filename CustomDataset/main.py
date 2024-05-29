@@ -301,12 +301,12 @@ def main(args):
         else:
             #model_without_ddp.load_state_dict(checkpoint)
             checkpoint_model = checkpoint
-            
-        state_dict = model_without_ddp.state_dict()
-        for k in ['proj_head.0.weight', 'proj_head.0.bias']:
-            if k in checkpoint_model and checkpoint_model[k].shape != state_dict[k].shape:
-                print(f"Removing key {k} from pretrained checkpoint")
-                del checkpoint_model[k]
+        if args.data_set != 'IMNET':    
+            state_dict = model_without_ddp.state_dict()
+            for k in ['proj_head.0.weight', 'proj_head.0.bias']:
+                if k in checkpoint_model and checkpoint_model[k].shape != state_dict[k].shape:
+                    print(f"Removing key {k} from pretrained checkpoint")
+                    del checkpoint_model[k]
         utils.load_state_dict(model_without_ddp, checkpoint_model)
         
         if not args.finetune:
