@@ -248,7 +248,7 @@ def main(args):
         model.eval()
         utils.cal_flops_params_with_fvcore(model, input_tensor)
 
-    #model.to(device)
+    model.to(device)
     model_ema = None
 
 
@@ -302,12 +302,12 @@ def main(args):
             #model_without_ddp.load_state_dict(checkpoint)
             checkpoint_model = checkpoint
             
-        state_dict = model.state_dict()
+        state_dict = model_without_ddp.state_dict()
         for k in ['proj_head.0.weight', 'proj_head.0.bias']:
             if k in checkpoint_model and checkpoint_model[k].shape != state_dict[k].shape:
                 print(f"Removing key {k} from pretrained checkpoint")
                 del checkpoint_model[k]
-        utils.load_state_dict(model, checkpoint_model)
+        utils.load_state_dict(model_without_ddp, checkpoint_model)
         
         if not args.finetune:
             if not args.eval and 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint and 'epoch' in checkpoint:
@@ -318,7 +318,6 @@ def main(args):
                 if 'scaler' in checkpoint:
                     loss_scaler.load_state_dict(checkpoint['scaler'])
                     
-    model.to(device)
     
     if args.eval:
         if hasattr(model.module, "merge_bn"):
