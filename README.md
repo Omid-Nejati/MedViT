@@ -5,8 +5,8 @@
 
 This repo is the official implementation of ["MedViT: A Robust Vision Transformer for Generalized Medical Image Classification"](https://arxiv.org/abs/2302.09462).
 
-##  :tada: :tada: :tada: Good News 
-  MedViT-V2 will be released soon [link](https://github.com/Omid-Nejati/MedViT-V2)
+##  :tada: :tada: :tada: Good News: MedViT-V2 will be released soon [link](https://github.com/Omid-Nejati/MedViT-V2) 
+  
 ## Train & Test --- Prepare data
 - (beginner friendly🍉) To train/evaluate MedViT on Cifar/Imagenet/CustomDataset follow ["CustomDataset"](https://github.com/Omid-Nejati/MedViT/blob/main/CustomDataset.md). 
 - (New version) Updated the code ["Instructions.ipynb"](https://github.com/Omid-Nejati/MedViT/blob/main/Instructions.ipynb), added the installation requirements and adversarial robustness. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Omid-Nejati/MedViT/blob/main/Instructions.ipynb)
