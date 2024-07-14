@@ -60,3 +60,10 @@ If you find this project useful in your research, please consider cite:
 
 ## Acknowledgement
 We heavily borrow the code from [RVT](https://github.com/vtddggg/Robust-Vision-Transformer) and [LocalViT](https://github.com/ofsoundof/LocalViT).
+
+## Contact Information
+
+For any inquiries or questions regarding the code, please feel free to contact us directly via email:
+
+- Omid Nejaty: [omid.nejaty@gmail.com](mailto:omid.nejaty@gmail.com)
+- Hossein kashiani: [hkashia@clemson.edu](mailto:hkashia@clemson.edu)
