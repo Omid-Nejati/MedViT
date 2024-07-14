@@ -10,7 +10,7 @@ if [ ! -d ${save_root_dir} ]; then
     mkdir -p ${save_root_dir}
     echo save root dir is ${save_root_dir}.
 else
-    echo Error, save root dir ${save_roort_dir} exist, please run the shell again!
+    echo Error, save root dir ${save_root_dir} exist, please run the shell again!
     exit 1
 fi
 
