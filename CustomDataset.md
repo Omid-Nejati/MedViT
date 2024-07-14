@@ -43,6 +43,12 @@ bash train.sh 8 --model MedViT_small --batch-size 30 --lr 5e-6 --warmup-epochs 0
 
 ```
 
+Train MedViT-small with custom dataset, run:
+```shell
+cd CustomDataset/
+!bash train.sh 1 --model MedViT_small --batch-size 30 --lr 5e-4 --warmup-epochs 0 --weight-decay 1e-8 --epochs 30 --sched step --decay-epochs 60 --data-set image_folder --data-path /kaggle/input/data-files/dataverse_files/Train --eval_data_path /kaggle/input/data-files/dataverse_files/Test
+```
+
 #### Evaluation 
 
 To evaluate the performance of MedViT-small on ImageNet using 8 gpus, run:

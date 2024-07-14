@@ -1,6 +1,6 @@
 einops
-timm
-medmnist
+timm==1.0.8
+medmnist==3.0.1
 numpy
 pandas
 scikit-learn

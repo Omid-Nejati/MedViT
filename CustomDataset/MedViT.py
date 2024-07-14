@@ -16,6 +16,12 @@ from utils import merge_pre_bn
 
 NORM_EPS = 1e-5
 
+model_urls = {
+    "medvit_small_1k": "https://dl.dropboxusercontent.com/scl/fi/ca014qy2qkhfxgovy9eq0/MedViT_small_im1k.pth?rlkey=lfyqor2wz79s05einuynvw0xg&st=5e7mhyk9&dl=0",
+    "medvit_base_1k": "https://dl.dropboxusercontent.com/scl/fi/d73j7es6921qhh1jb6hz4/MedViT_base_im1k.pth?rlkey=swylmvh583nzbtl45fjt56j36&st=pg51uk2y&dl=0",
+    "medvit_large_1k": "https://dl.dropboxusercontent.com/scl/fi/ardpdupcmfwf58yaw91hp/MedViT_large_im1k.pth?rlkey=gftk4ngacr3k98nht3wyefhuz&st=w36m4hsm&dl=0",
+}
+
 
 class ConvBNReLU(nn.Module):
     def __init__(
@@ -503,16 +509,33 @@ class MedViT(nn.Module):
 @register_model
 def MedViT_small(pretrained=False, pretrained_cfg=None, pretrained_cfg_overlay= None, **kwargs):
     model = MedViT(stem_chs=[64, 32, 64], depths=[3, 4, 10, 3], path_dropout=0.1, **kwargs)
+
+    if pretrained:
+        url = model_urls["medvit_small_1k"]
+        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu")['model']
+        model.load_state_dict(checkpoint)
+
     return model
 
 
 @register_model
 def MedViT_base(pretrained=False, pretrained_cfg=None, pretrained_cfg_overlay= None, **kwargs):
     model = MedViT(stem_chs=[64, 32, 64], depths=[3, 4, 20, 3], path_dropout=0.2, **kwargs)
+
+    if pretrained:
+        url = model_urls["medvit_base_1k"]
+        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu")['model']
+        model.load_state_dict(checkpoint)
     return model
 
 
 @register_model
 def MedViT_large(pretrained=False, pretrained_cfg=None, pretrained_cfg_overlay= None, **kwargs):
     model = MedViT(stem_chs=[64, 32, 64], depths=[3, 4, 30, 3], path_dropout=0.2, **kwargs)
+
+    if pretrained:
+        url = model_urls["medvit_large_1k"]
+        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu")['model']
+        model.load_state_dict(checkpoint)
     return model
+
