@@ -57,6 +57,9 @@ If you find this project useful in your research, please consider cite:
   publisher={Elsevier}
 }
 ```
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Omid-Nejati/MedViT&type=Date)](https://star-history.com/#Omid-Nejati/MedViT&Date)
 
 ## Acknowledgement
 We heavily borrow the code from [RVT](https://github.com/vtddggg/Robust-Vision-Transformer) and [LocalViT](https://github.com/ofsoundof/LocalViT).
