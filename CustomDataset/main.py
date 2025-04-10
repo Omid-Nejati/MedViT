@@ -6,12 +6,14 @@ import torch
 import torch.backends.cudnn as cudnn
 import json
 import os
+import torch.nn as nn
+import torch.nn.functional as F
 
 from torch.utils.data import WeightedRandomSampler
 from pathlib import Path
 from timm.data import Mixup
 from timm.models import create_model
-from timm.loss import LabelSmoothingCrossEntropy, SoftTargetCrossEntropy
+from timm.loss import LabelSmoothingCrossEntropy
 from timm.scheduler import create_scheduler
 from timm.optim import create_optimizer
 from timm.utils import NativeScaler, get_state_dict, ModelEma
@@ -186,6 +188,28 @@ def get_class_counts(path):
         class_counts.append(image_len)
     weights = 1. / torch.tensor(class_counts, dtype=torch.float)
     return weights
+
+class SoftTargetCrossEntropy(nn.Module):
+    def __init__(self, weight=None):
+        super().__init__()
+        self.weight = weight  # Tensor kích thước [num_classes] hoặc None
+
+    def forward(self, inputs, targets):
+        """
+        inputs: [batch_size, num_classes] (logits)
+        targets: [batch_size, num_classes] (soft label như [0.8, 0.2, 0.0])
+        """
+        log_probs = F.log_softmax(inputs, dim=-1)
+
+        if self.weight is not None:
+            # reshape weights để broadcast đúng shape: [1, num_classes]
+            weighted_log_probs = log_probs * self.weight.unsqueeze(0)
+            loss = -torch.sum(targets * weighted_log_probs, dim=-1)
+        else:
+            loss = -torch.sum(targets * log_probs, dim=-1)
+
+        return loss.mean()
+
 
 def main(args):
     utils.init_distributed_mode(args)
