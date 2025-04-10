@@ -289,7 +289,7 @@ def main(args):
 
     if args.mixup > 0.:
         # smoothing is handled with mixup label transform
-        criterion = SoftTargetCrossEntropy()
+        criterion = SoftTargetCrossEntropy(weight=class_weights.cuda())
     elif args.smoothing:
         criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing, weight=class_weights.cuda())
     else:
