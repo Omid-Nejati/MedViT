@@ -202,8 +202,7 @@ def main(args):
     dataset_train, args.nb_classes = build_dataset(is_train=True, args=args)
 
     # set class weights
-    weights = get_class_counts(args.data_path)
-    sampler = WeightedRandomSampler(weights, len(weights), replacement=True)
+    class_weights = get_class_counts(args.data_path)
 
     dataset_val, _ = build_dataset(is_train=False, args=args)
 
@@ -232,7 +231,7 @@ def main(args):
         sampler_val = torch.utils.data.SequentialSampler(dataset_val)
 
     data_loader_train = torch.utils.data.DataLoader(
-        dataset_train, sampler=sampler,
+        dataset_train, sampler=sampler_train,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
         pin_memory=args.pin_mem,
@@ -290,11 +289,11 @@ def main(args):
 
     if args.mixup > 0.:
         # smoothing is handled with mixup label transform
-        criterion = SoftTargetCrossEntropy()
+        criterion = SoftTargetCrossEntropy(weight=class_weights.cuda())
     elif args.smoothing:
-        criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
+        criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing, weight=class_weights.cuda())
     else:
-        criterion = torch.nn.CrossEntropyLoss()
+        criterion = torch.nn.CrossEntropyLoss(weight=class_weights.cuda())
 
     criterion = DistillationLoss(
         criterion, None, 'none', 0, 0
