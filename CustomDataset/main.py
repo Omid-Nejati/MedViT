@@ -5,7 +5,9 @@ import time
 import torch
 import torch.backends.cudnn as cudnn
 import json
+import os
 
+from torch.utils.data import WeightedRandomSampler
 from pathlib import Path
 from timm.data import Mixup
 from timm.models import create_model
@@ -174,6 +176,17 @@ def throughput(data_loader, model, logger):
         logger.info(f"batch_size {batch_size} throughput {30 * batch_size / (tic2 - tic1)}")
         return
 
+def get_class_counts(path):
+    class_counts = []
+    for file in os.listdir(path):
+        class_name = file
+        file_path = os.path.join(path, file)
+        image_len = len(os.listdir(file_path))
+        print(f"{class_name}: {image_len}")
+        class_counts.append(image_len)
+    weights = 1. / torch.tensor(class_counts, dtype=torch.float)
+    return weights
+
 def main(args):
     utils.init_distributed_mode(args)
     print(args)
@@ -187,6 +200,11 @@ def main(args):
     cudnn.benchmark = True
 
     dataset_train, args.nb_classes = build_dataset(is_train=True, args=args)
+
+    # set class weights
+    weights = get_class_counts(args.data_path)
+    sampler = WeightedRandomSampler(weights, len(weights), replacement=True)
+
     dataset_val, _ = build_dataset(is_train=False, args=args)
 
     if args.distributed:
@@ -214,7 +232,7 @@ def main(args):
         sampler_val = torch.utils.data.SequentialSampler(dataset_val)
 
     data_loader_train = torch.utils.data.DataLoader(
-        dataset_train, sampler=sampler_train,
+        dataset_train, sampler=sampler,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
         pin_memory=args.pin_mem,
