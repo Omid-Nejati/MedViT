@@ -204,7 +204,7 @@ class SoftTargetCrossEntropy(nn.Module):
         if self.weight is not None:
             # reshape weights để broadcast đúng shape: [1, num_classes]
             weighted_log_probs = log_probs * self.weight.unsqueeze(0)
-            loss = -torch.sum(targets * weighted_log_probs, dim=-1)
+            loss = -torch.sum(targets * weighted_log_probs * 100, dim=-1)
         else:
             loss = -torch.sum(targets * log_probs, dim=-1)
 
