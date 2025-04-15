@@ -73,7 +73,7 @@ def Line(y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue'):
     None
         Displays the line chart using matplotlib's show() function
     """
-    plt.line( y, color=color)
+    plt.plot( y, color=color)
     plt.title(Title)
     plt.xlabel(X_label)
     plt.ylabel(Y_label)
