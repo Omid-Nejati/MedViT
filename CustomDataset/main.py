@@ -393,8 +393,6 @@ def main(args):
                 }, checkpoint_path)
 
         test_stats = evaluate(data_loader_val, model, device)
-        log_acc.append(test_stats["acc1"])
-        loss_acc.append(train_stats['loss'])
 
         # Calculate and store metrics
         y_true = []
@@ -443,6 +441,8 @@ def main(args):
         if args.output_dir and utils.is_main_process():
             with (output_dir / "log.txt").open("a") as f:
                 f.write(json.dumps(log_stats) + "\n")
+        log_acc.append(test_stats["acc1"])
+        loss_acc.append(train_stats['loss'])
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
