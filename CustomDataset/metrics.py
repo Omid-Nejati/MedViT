@@ -28,8 +28,13 @@ def calculate_metrics(y_true, y_pred, y_score=None, labels=None):
         n_classes = len(np.unique(y_true))
         roc_auc = []
         for i in range(n_classes):
-            fpr, tpr, _ = roc_curve(y_true == i, y_score[:, i])
-            roc_auc.append(auc(fpr, tpr))
+            # Convert to binary classification for each class
+            y_true_binary = (y_true == i).astype(int)
+            if len(np.unique(y_true_binary)) > 1:  # Only calculate if both classes are present
+                fpr, tpr, _ = roc_curve(y_true_binary, y_score[:, i])
+                roc_auc.append(auc(fpr, tpr))
+            else:
+                roc_auc.append(0.0)  # If only one class is present, AUC is not defined
         metrics['auc'] = roc_auc
     
     return metrics
@@ -51,9 +56,12 @@ def plot_roc_curve(y_true, y_score, class_names=None, title="ROC Curves"):
     plt.figure(figsize=(10, 8))
     
     for i in range(n_classes):
-        fpr, tpr, _ = roc_curve(y_true == i, y_score[:, i])
-        roc_auc = auc(fpr, tpr)
-        plt.plot(fpr, tpr, label=f'{class_names[i]} (AUC = {roc_auc:.2f})')
+        # Convert to binary classification for each class
+        y_true_binary = (y_true == i).astype(int)
+        if len(np.unique(y_true_binary)) > 1:  # Only plot if both classes are present
+            fpr, tpr, _ = roc_curve(y_true_binary, y_score[:, i])
+            roc_auc = auc(fpr, tpr)
+            plt.plot(fpr, tpr, label=f'{class_names[i]} (AUC = {roc_auc:.2f})')
     
     plt.plot([0, 1], [0, 1], 'k--')
     plt.xlim([0.0, 1.0])
@@ -82,9 +90,12 @@ def plot_precision_recall_curve(y_true, y_score, class_names=None, title="Precis
     plt.figure(figsize=(10, 8))
     
     for i in range(n_classes):
-        precision, recall, _ = precision_recall_curve(y_true == i, y_score[:, i])
-        pr_auc = auc(recall, precision)
-        plt.plot(recall, precision, label=f'{class_names[i]} (AUC = {pr_auc:.2f})')
+        # Convert to binary classification for each class
+        y_true_binary = (y_true == i).astype(int)
+        if len(np.unique(y_true_binary)) > 1:  # Only plot if both classes are present
+            precision, recall, _ = precision_recall_curve(y_true_binary, y_score[:, i])
+            pr_auc = auc(recall, precision)
+            plt.plot(recall, precision, label=f'{class_names[i]} (AUC = {pr_auc:.2f})')
     
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
