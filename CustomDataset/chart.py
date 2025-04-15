@@ -23,7 +23,7 @@ def BarChart(x, y, Title="Bar chart_data", X_label='x', Y_label='y', color='skyb
     # Display the chart
     plt.show()
 
-def LineChart(y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue'):
+def LineChart(x, y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue'):
     """
     Creates and displays a line chart using matplotlib.
     
@@ -45,13 +45,13 @@ def LineChart(y, Title="Line chart_data", X_label='x', Y_label='y', color='skybl
     None
         Displays the line chart using matplotlib's show() function
     """
-    plt.plot(x, y, color=color)
+    plt.line( x, y, color=color)
     plt.title(Title)
     plt.xlabel(X_label)
     plt.ylabel(Y_label)
     plt.show()
 
-def LineChart(y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue'):
+def Line(y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue'):
     """
     Creates and displays a line chart using matplotlib.
     
@@ -73,7 +73,7 @@ def LineChart(y, Title="Line chart_data", X_label='x', Y_label='y', color='skybl
     None
         Displays the line chart using matplotlib's show() function
     """
-    plt.plot(x, y, color=color)
+    plt.line( y, color=color)
     plt.title(Title)
     plt.xlabel(X_label)
     plt.ylabel(Y_label)
