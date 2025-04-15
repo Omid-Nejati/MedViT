@@ -23,7 +23,7 @@ def BarChart(x, y, Title="Bar chart_data", X_label='x', Y_label='y', color='skyb
     # Display the chart
     plt.show()
 
-def LineChart(x, y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue'):
+def LineChart(x, y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue', filename = "line.png"):
     """
     Creates and displays a line chart using matplotlib.
     
@@ -49,7 +49,8 @@ def LineChart(x, y, Title="Line chart_data", X_label='x', Y_label='y', color='sk
     plt.title(Title)
     plt.xlabel(X_label)
     plt.ylabel(Y_label)
-    plt.show()
+    plt.savefig(filename)
+    plt.close()
 
 def Line(y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue'):
     """

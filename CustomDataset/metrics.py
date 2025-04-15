@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.metrics import precision_recall_fscore_support, roc_curve, auc, precision_recall_curve
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 def calculate_metrics(y_true, y_pred, y_score=None, labels=None):
     """
@@ -39,16 +40,22 @@ def calculate_metrics(y_true, y_pred, y_score=None, labels=None):
     
     return metrics
 
-def plot_roc_curve(y_true, y_score, class_names=None, title="ROC Curves"):
+def ensure_dir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+def plot_roc_curve(y_true, y_score, class_names=None, title="ROC Curves", save_dir="plots"):
     """
-    Plot ROC curves for each class
+    Plot ROC curves for each class and save the figure
     
     Args:
         y_true: Ground truth labels
         y_score: Predicted probabilities or decision function scores
         class_names: List of class names
         title: Title of the plot
+        save_dir: Directory to save the plot
     """
+    ensure_dir(save_dir)
     n_classes = len(np.unique(y_true))
     if class_names is None:
         class_names = [f'Class {i}' for i in range(n_classes)]
@@ -71,18 +78,23 @@ def plot_roc_curve(y_true, y_score, class_names=None, title="ROC Curves"):
     plt.title(title)
     plt.legend(loc="lower right")
     plt.grid(True)
-    plt.show()
+    
+    # Save the figure
+    plt.savefig(os.path.join(save_dir, 'roc_curves.png'), dpi=300, bbox_inches='tight')
+    plt.close()
 
-def plot_precision_recall_curve(y_true, y_score, class_names=None, title="Precision-Recall Curves"):
+def plot_precision_recall_curve(y_true, y_score, class_names=None, title="Precision-Recall Curves", save_dir="plots"):
     """
-    Plot Precision-Recall curves for each class
+    Plot Precision-Recall curves for each class and save the figure
     
     Args:
         y_true: Ground truth labels
         y_score: Predicted probabilities or decision function scores
         class_names: List of class names
         title: Title of the plot
+        save_dir: Directory to save the plot
     """
+    ensure_dir(save_dir)
     n_classes = len(np.unique(y_true))
     if class_names is None:
         class_names = [f'Class {i}' for i in range(n_classes)]
@@ -104,17 +116,22 @@ def plot_precision_recall_curve(y_true, y_score, class_names=None, title="Precis
     plt.title(title)
     plt.legend(loc="lower left")
     plt.grid(True)
-    plt.show()
+    
+    # Save the figure
+    plt.savefig(os.path.join(save_dir, 'precision_recall_curves.png'), dpi=300, bbox_inches='tight')
+    plt.close()
 
-def plot_metrics_bar(metrics, class_names=None, title="Classification Metrics"):
+def plot_metrics_bar(metrics, class_names=None, title="Classification Metrics", save_dir="plots"):
     """
-    Plot precision, recall, F1-score, and AUC as grouped bar chart
+    Plot precision, recall, F1-score, and AUC as grouped bar chart and save the figure
     
     Args:
         metrics: Dictionary containing precision, recall, F1-score, and AUC
         class_names: List of class names
         title: Title of the plot
+        save_dir: Directory to save the plot
     """
+    ensure_dir(save_dir)
     if class_names is None:
         class_names = [f'Class {i}' for i in range(len(metrics['precision']))]
     
@@ -151,16 +168,21 @@ def plot_metrics_bar(metrics, class_names=None, title="Classification Metrics"):
         autolabel(rects4)
     
     fig.tight_layout()
-    plt.show()
+    
+    # Save the figure
+    plt.savefig(os.path.join(save_dir, 'classification_metrics.png'), dpi=300, bbox_inches='tight')
+    plt.close()
 
-def plot_metrics_line(metrics_history, title="Metrics Over Time"):
+def plot_metrics_line(metrics_history, title="Metrics Over Time", save_dir="plots"):
     """
-    Plot precision, recall, F1-score, and AUC over time as line plot
+    Plot precision, recall, F1-score, and AUC over time as line plot and save the figure
     
     Args:
         metrics_history: List of dictionaries containing metrics for each epoch
         title: Title of the plot
+        save_dir: Directory to save the plot
     """
+    ensure_dir(save_dir)
     epochs = range(1, len(metrics_history) + 1)
     
     plt.figure(figsize=(12, 6))
@@ -190,24 +212,30 @@ def plot_metrics_line(metrics_history, title="Metrics Over Time"):
     
     plt.suptitle(title)
     plt.tight_layout()
-    plt.show()
+    
+    # Save the figure
+    plt.savefig(os.path.join(save_dir, 'metrics_over_time.png'), dpi=300, bbox_inches='tight')
+    plt.close()
 
-def plot_confusion_matrix(y_true, y_pred, class_names=None, title="Confusion Matrix"):
+def plot_confusion_matrix(y_true, y_pred, class_names=None, title="Confusion Matrix", save_dir="plots"):
     """
-    Plot confusion matrix with normalized values
+    Plot confusion matrix with normalized values and save the figure
     
     Args:
         y_true: Ground truth labels
         y_pred: Predicted labels
         class_names: List of class names
         title: Title of the plot
+        save_dir: Directory to save the plot
     """
+    ensure_dir(save_dir)
     from sklearn.metrics import confusion_matrix
     import seaborn as sns
     
     cm = confusion_matrix(y_true, y_pred)
     cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     
+    # Plot normalized confusion matrix
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm_norm, annot=True, fmt='.2f', cmap='Blues',
                 xticklabels=class_names,
@@ -215,9 +243,10 @@ def plot_confusion_matrix(y_true, y_pred, class_names=None, title="Confusion Mat
     plt.title(title)
     plt.ylabel('True Label')
     plt.xlabel('Predicted Label')
-    plt.show()
+    plt.savefig(os.path.join(save_dir, 'confusion_matrix_normalized.png'), dpi=300, bbox_inches='tight')
+    plt.close()
     
-    # Also plot raw counts
+    # Plot raw counts confusion matrix
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
                 xticklabels=class_names,
@@ -225,4 +254,5 @@ def plot_confusion_matrix(y_true, y_pred, class_names=None, title="Confusion Mat
     plt.title(f"{title} (Raw Counts)")
     plt.ylabel('True Label')
     plt.xlabel('Predicted Label')
-    plt.show() 
+    plt.savefig(os.path.join(save_dir, 'confusion_matrix_raw.png'), dpi=300, bbox_inches='tight')
+    plt.close() 

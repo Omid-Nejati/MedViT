@@ -467,8 +467,8 @@ def main(args):
     plot_confusion_matrix(y_true_all, y_pred_all, class_names, title="Final Confusion Matrix")
     
     # Plot loss and accuracy
-    Line(loss_acc, Title="Loss", X_label='Epoch', Y_label='Loss', color='skyblue')
-    Line(log_acc, Title="Accuracy", X_label='Epoch', Y_label='Accuracy', color='skyblue')
+    Line(loss_acc, Title="Loss", X_label='Epoch', Y_label='Loss', color='skyblue', name="loss.png")
+    Line(log_acc, Title="Accuracy", X_label='Epoch', Y_label='Accuracy', color='skyblue', name="accuracy.png")
 
 
 if __name__ == '__main__':
