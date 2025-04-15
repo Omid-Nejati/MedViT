@@ -52,7 +52,7 @@ def LineChart(x, y, Title="Line chart_data", X_label='x', Y_label='y', color='sk
     plt.savefig(name)
     plt.close()
 
-def Line(y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue', Name = ""):
+def Line(y, Title="Line chart_data", X_label='x', Y_label='y', color='skyblue', name = ""):
     """
     Creates and displays a line chart using matplotlib.
     
