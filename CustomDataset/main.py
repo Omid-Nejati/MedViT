@@ -23,7 +23,7 @@ from losses import DistillationLoss
 from samplers import RASampler
 import utils
 import MedViT 
-from chart import BarChart, LineChart
+from chart import BarChart, Line
 from metrics import calculate_metrics, plot_metrics_bar, plot_metrics_line, plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve
 
 def get_args_parser():
