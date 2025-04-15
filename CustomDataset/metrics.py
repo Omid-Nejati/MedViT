@@ -29,7 +29,7 @@ def calculate_metrics(y_true, y_pred, y_score=None, labels=None):
         roc_auc = []
         for i in range(n_classes):
             # Convert to binary classification for each class
-            y_true_binary = (y_true == i).astype(int)
+            y_true_binary = (y_true == i)
             if len(np.unique(y_true_binary)) > 1:  # Only calculate if both classes are present
                 fpr, tpr, _ = roc_curve(y_true_binary, y_score[:, i])
                 roc_auc.append(auc(fpr, tpr))
@@ -57,7 +57,7 @@ def plot_roc_curve(y_true, y_score, class_names=None, title="ROC Curves"):
     
     for i in range(n_classes):
         # Convert to binary classification for each class
-        y_true_binary = (y_true == i).astype(int)
+        y_true_binary = (y_true == i)
         if len(np.unique(y_true_binary)) > 1:  # Only plot if both classes are present
             fpr, tpr, _ = roc_curve(y_true_binary, y_score[:, i])
             roc_auc = auc(fpr, tpr)
@@ -91,7 +91,7 @@ def plot_precision_recall_curve(y_true, y_score, class_names=None, title="Precis
     
     for i in range(n_classes):
         # Convert to binary classification for each class
-        y_true_binary = (y_true == i).astype(int)
+        y_true_binary = (y_true == i)
         if len(np.unique(y_true_binary)) > 1:  # Only plot if both classes are present
             precision, recall, _ = precision_recall_curve(y_true_binary, y_score[:, i])
             pr_auc = auc(recall, precision)
