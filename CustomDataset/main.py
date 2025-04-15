@@ -23,6 +23,8 @@ from losses import DistillationLoss
 from samplers import RASampler
 import utils
 import MedViT 
+from chart import BarChart, LineChart
+from metrics import calculate_metrics, plot_metrics_bar, plot_metrics_line, plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve
 
 def get_args_parser():
     parser = argparse.ArgumentParser('MedViT training and evaluation script', add_help=False)
@@ -302,6 +304,13 @@ def main(args):
     criterion = DistillationLoss(
         criterion, None, 'none', 0, 0
     )
+    
+    log_acc = []
+    loss_acc = []
+    metrics_history = []  # Track metrics over time
+    y_true_all = []
+    y_pred_all = []
+    y_score_all = []  # Store predicted probabilities
 
     if not args.output_dir:
         args.output_dir = args.model
@@ -358,6 +367,7 @@ def main(args):
     print(f"Start training for {args.epochs} epochs")
     start_time = time.time()
     max_accuracy = 0.0
+    
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             data_loader_train.sampler.set_epoch(epoch)
@@ -383,6 +393,34 @@ def main(args):
                 }, checkpoint_path)
 
         test_stats = evaluate(data_loader_val, model, device)
+        log_acc.append(test_stats["acc1"])
+        loss_acc.append(train_stats['loss'])
+
+        # Calculate and store metrics
+        y_true = []
+        y_pred = []
+        y_score = []
+        model.eval()
+        with torch.no_grad():
+            for images, targets in data_loader_val:
+                images = images.to(device, non_blocking=True)
+                targets = targets.to(device, non_blocking=True)
+                outputs = model(images)
+                probabilities = torch.softmax(outputs, dim=1)
+                _, predicted = torch.max(outputs.data, 1)
+                y_true.extend(targets.cpu().numpy())
+                y_pred.extend(predicted.cpu().numpy())
+                y_score.extend(probabilities.cpu().numpy())
+        
+        y_score = np.array(y_score)
+        metrics = calculate_metrics(y_true, y_pred, y_score)
+        metrics_history.append(metrics)
+        
+        # Store all predictions for final evaluation
+        y_true_all.extend(y_true)
+        y_pred_all.extend(y_pred)
+        y_score_all.extend(y_score)
+
         print(f"Accuracy of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
         if test_stats["acc1"] > max_accuracy:
             if args.output_dir:
@@ -409,6 +447,28 @@ def main(args):
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     print('Training time {}'.format(total_time_str))
+    
+    # Plot metrics
+    class_names = [f'Class {i}' for i in range(args.nb_classes)]
+    
+    # Plot final metrics as bar chart
+    plot_metrics_bar(metrics, class_names, title="Final Classification Metrics")
+    
+    # Plot metrics over time
+    plot_metrics_line(metrics_history, title="Metrics Over Training")
+    
+    # Plot ROC curves
+    plot_roc_curve(y_true_all, np.array(y_score_all), class_names, title="ROC Curves")
+    
+    # Plot Precision-Recall curves
+    plot_precision_recall_curve(y_true_all, np.array(y_score_all), class_names, title="Precision-Recall Curves")
+    
+    # Plot confusion matrix
+    plot_confusion_matrix(y_true_all, y_pred_all, class_names, title="Final Confusion Matrix")
+    
+    # Plot loss and accuracy
+    LineChart(loss_acc, Title="Loss", X_label='Epoch', Y_label='Loss', color='skyblue')
+    LineChart(log_acc, Title="Accuracy", X_label='Epoch', Y_label='Accuracy', color='skyblue')
 
 
 if __name__ == '__main__':
