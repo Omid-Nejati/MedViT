@@ -261,5 +261,7 @@ def check_pred(y_true, i):
     y = []
     for i in range(len(y_true)):
         if y_true[i] == i:
-            y.append(i)
+            y.append(1)
+        else:
+            y.append(0)
     return y
