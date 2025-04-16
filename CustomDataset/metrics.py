@@ -30,7 +30,7 @@ def calculate_metrics(y_true, y_pred, y_score=None, labels=None):
         roc_auc = []
         for i in range(n_classes):
             # Convert to binary classification for each class
-            y_true_binary = (y_true == i)
+            y_true_binary = check_pred(y_true, i)
             if len(np.unique(y_true_binary)) > 1:  # Only calculate if both classes are present
                 fpr, tpr, _ = roc_curve(y_true_binary, y_score[:, i])
                 roc_auc.append(auc(fpr, tpr))
@@ -64,7 +64,7 @@ def plot_roc_curve(y_true, y_score, class_names=None, title="ROC Curves", save_d
     
     for i in range(n_classes):
         # Convert to binary classification for each class
-        y_true_binary = (y_true == i)
+        y_true_binary = check_pred(y_true, i)
         if len(np.unique(y_true_binary)) > 1:  # Only plot if both classes are present
             fpr, tpr, _ = roc_curve(y_true_binary, y_score[:, i])
             roc_auc = auc(fpr, tpr)
@@ -103,7 +103,7 @@ def plot_precision_recall_curve(y_true, y_score, class_names=None, title="Precis
     
     for i in range(n_classes):
         # Convert to binary classification for each class
-        y_true_binary = (y_true == i)
+        y_true_binary = check_pred(y_true, i)
         if len(np.unique(y_true_binary)) > 1:  # Only plot if both classes are present
             precision, recall, _ = precision_recall_curve(y_true_binary, y_score[:, i])
             pr_auc = auc(recall, precision)
@@ -256,3 +256,10 @@ def plot_confusion_matrix(y_true, y_pred, class_names=None, title="Confusion Mat
     plt.xlabel('Predicted Label')
     plt.savefig(os.path.join(save_dir, 'confusion_matrix_raw.png'), dpi=300, bbox_inches='tight')
     plt.close() 
+
+def check_pred(y_true, i):
+    y = []
+    for i in range(len(y_true)):
+        if y_true[i] == i:
+            y.append(i)
+    return y
