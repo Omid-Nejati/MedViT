@@ -435,7 +435,6 @@ def main(args):
         y_pred_all.extend(y_pred)
         y_score_all.extend(y_score)
 
-        print(f"Accuracy of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
         if test_stats["acc1"] > max_accuracy:
             if args.output_dir:
                 checkpoint_paths = [output_dir / 'checkpoint_best.pth']
