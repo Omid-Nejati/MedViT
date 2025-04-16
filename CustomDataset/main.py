@@ -312,7 +312,7 @@ def main(args):
 
     lr_scheduler, _ = create_scheduler(args, optimizer)
 
-    conf_matrix = get_confusion_matrix(model, val_loader, num_classes)
+    conf_matrix = get_confusion_matrix(model, data_loader_val, num_classes)
     criterion = ConfusionAwareLoss(confusion_matrix=conf_matrix, temperature=1.0)
 
     # if args.mixup > 0.:
