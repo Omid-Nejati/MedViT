@@ -293,13 +293,13 @@ def main(args):
 
     criterion = LabelSmoothingCrossEntropy()
 
-    if args.smoothing:
-        # smoothing is handled with mixup label transform
-        criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing, weight=class_weights.cuda())
-    elif args.mixup > 0.:
-        criterion = SoftTargetCrossEntropy()
-    else:
-        criterion = torch.nn.CrossEntropyLoss(weight=class_weights.cuda())
+    # if args.smoothing:
+    #     # smoothing is handled with mixup label transform
+    #     criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
+    # elif args.mixup > 0.:
+    #     criterion = SoftTargetCrossEntropy()
+    # else:
+    criterion = torch.nn.CrossEntropyLoss(weight=class_weights.cuda())
 
     criterion = DistillationLoss(
         criterion, None, 'none', 0, 0
