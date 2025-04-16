@@ -458,13 +458,13 @@ def main(args):
     plot_metrics_line(metrics_history, title="Metrics Over Training")
     
     # Plot ROC curves
-    plot_roc_curve(y_true_all, np.array(y_score_all), class_names, title="ROC Curves")
+    plot_roc_curve(y_true_all[-1], np.array(y_score_all[-1]), class_names, title="ROC Curves")
     
     # Plot Precision-Recall curves
-    plot_precision_recall_curve(y_true_all, np.array(y_score_all), class_names, title="Precision-Recall Curves")
+    plot_precision_recall_curve(y_true_all[-1], np.array(y_score_all[-1]), class_names, title="Precision-Recall Curves")
     
     # Plot confusion matrix
-    plot_confusion_matrix(y_true_all, y_pred_all, class_names, title="Final Confusion Matrix")
+    plot_confusion_matrix(y_true_all[-1], y_pred_all[-1], class_names, title="Final Confusion Matrix")
     
     # Plot loss and accuracy
     Line(loss_acc, Title="Loss", X_label='Epoch', Y_label='Loss', color='skyblue', name="loss.png")
