@@ -15,6 +15,7 @@ import torch.nn as nn
 from pathlib import Path
 from timm.data import Mixup
 from timm.models import create_model
+from engine import train_one_epoch, evaluate
 from timm.loss import LabelSmoothingCrossEntropy, SoftTargetCrossEntropy
 from timm.scheduler import create_scheduler
 from timm.optim import create_optimizer
@@ -407,8 +408,8 @@ def main(args):
                     'scaler': loss_scaler.state_dict(),
                     'args': args,
                 }, checkpoint_path)
-
-
+        test_stats = evaluate(data_loader_val, model, device)
+        print(f"Accuracy of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
         # Calculate and store metrics
         y_true = []
         y_pred = []
