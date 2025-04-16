@@ -286,7 +286,7 @@ def main(args):
         args.model,
         num_classes=args.nb_classes,
     )
-
+    num_classes=args.nb_classes
     if not args.distributed or args.rank == 0:
         print(model)
         input_tensor = torch.zeros((1, 3, 224, 224), dtype=torch.float32)
