@@ -20,7 +20,6 @@ from timm.scheduler import create_scheduler
 from timm.optim import create_optimizer
 from timm.utils import NativeScaler, get_state_dict, ModelEma
 from datasets import build_dataset
-from engine import train_one_epoch, evaluate
 from losses import DistillationLoss
 from samplers import RASampler
 import utils
@@ -396,13 +395,6 @@ def main(args):
         if args.distributed:
             data_loader_train.sampler.set_epoch(epoch)
 
-        train_stats = train_one_epoch(
-            model, criterion, data_loader_train,
-            optimizer, device, epoch, loss_scaler,
-            args.clip_grad, model_ema, mixup_fn,
-            set_training_mode=True,
-        )
-
         lr_scheduler.step(epoch)
         if args.output_dir:
             checkpoint_paths = [output_dir / 'checkpoint.pth']
@@ -416,7 +408,6 @@ def main(args):
                     'args': args,
                 }, checkpoint_path)
 
-        test_stats = evaluate(data_loader_val, model, device)
 
         # Calculate and store metrics
         y_true = []
