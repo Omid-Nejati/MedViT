@@ -10,6 +10,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from torch.utils.data import WeightedRandomSampler
+import torch.nn.functional as F
+import torch.nn as nn
 from pathlib import Path
 from timm.data import Mixup
 from timm.models import create_model
@@ -25,6 +27,25 @@ import utils
 import MedViT 
 from chart import BarChart, Line
 from metrics import calculate_metrics, plot_metrics_bar, plot_metrics_line, plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve
+from sklearn.metrics import confusion_matrix
+import torch
+def get_confusion_matrix(model, dataloader, num_classes):
+    model.eval()
+    all_preds = []
+    all_labels = []
+    with torch.no_grad():
+        for images, labels in dataloader:
+            images = images.cuda()
+            labels = labels.cuda()
+            outputs = model(images)
+            preds = outputs.argmax(dim=1)
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+    
+    cm = confusion_matrix(all_labels, all_preds, labels=range(num_classes))
+    cm = cm.astype(float)
+    cm = cm / (cm.sum(axis=1, keepdims=True) + 1e-6)  # tránh chia 0
+    return torch.tensor(cm, dtype=torch.float32).cuda()
 
 def get_args_parser():
     parser = argparse.ArgumentParser('MedViT training and evaluation script', add_help=False)
@@ -291,15 +312,16 @@ def main(args):
 
     lr_scheduler, _ = create_scheduler(args, optimizer)
 
-    criterion = LabelSmoothingCrossEntropy()
+    conf_matrix = get_confusion_matrix(model, val_loader, num_classes)
+    criterion = ConfusionAwareLoss(confusion_matrix=conf_matrix, temperature=1.0)
 
-    # if args.smoothing:
+    # if args.mixup > 0.:
     #     # smoothing is handled with mixup label transform
-    #     criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
-    # elif args.mixup > 0.:
     #     criterion = SoftTargetCrossEntropy()
+    # elif args.smoothing:
+    #     criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing, weight=class_weights.cuda())
     # else:
-    criterion = torch.nn.CrossEntropyLoss(weight=class_weights.cuda())
+    #     criterion = torch.nn.CrossEntropyLoss(weight=class_weights.cuda())
 
     criterion = DistillationLoss(
         criterion, None, 'none', 0, 0
@@ -411,7 +433,8 @@ def main(args):
                 y_true.extend(targets.cpu().numpy())
                 y_pred.extend(predicted.cpu().numpy())
                 y_score.extend(probabilities.cpu().numpy())
-        
+            conf_matrix = get_confusion_matrix(model, data_loader_val, num_classes)
+            criterion = ConfusionAwareLoss(confusion_matrix=conf_matrix, temperature=1.0)
         y_score = np.array(y_score)
         metrics = calculate_metrics(y_true, y_pred, y_score)
         metrics_history.append(metrics)
@@ -471,6 +494,21 @@ def main(args):
     # Plot loss and accuracy
     Line(loss_acc, Title="Loss", X_label='Epoch', Y_label='Loss', color='skyblue', name="loss.png")
     Line(log_acc, Title="Accuracy", X_label='Epoch', Y_label='Accuracy', color='skyblue', name="accuracy.png")
+
+
+class ConfusionAwareLoss(nn.Module):
+    def __init__(self, confusion_matrix, temperature=1.0):
+        super().__init__()
+        self.confusion_matrix = confusion_matrix
+        self.temperature = temperature
+
+    def forward(self, logits, targets):
+        probs = F.softmax(logits / self.temperature, dim=1)
+        log_probs = torch.log(probs + 1e-12)
+
+        confusion_weights = self.confusion_matrix[targets]  # [B, C]
+        loss = -torch.sum(confusion_weights * log_probs, dim=1).mean()
+        return loss
 
 
 if __name__ == '__main__':
