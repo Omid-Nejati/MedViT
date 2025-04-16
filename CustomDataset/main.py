@@ -313,7 +313,6 @@ def main(args):
     lr_scheduler, _ = create_scheduler(args, optimizer)
 
     conf_matrix = get_confusion_matrix(model, data_loader_val, num_classes)
-    criterion = ConfusionAwareLoss(confusion_matrix=conf_matrix, temperature=1.0)
 
     # if args.mixup > 0.:
     #     # smoothing is handled with mixup label transform
@@ -321,7 +320,7 @@ def main(args):
     # elif args.smoothing:
     #     criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing, weight=class_weights.cuda())
     # else:
-    #     criterion = torch.nn.CrossEntropyLoss(weight=class_weights.cuda())
+    criterion = torch.nn.CrossEntropyLoss(weight=class_weights.cuda())
 
     criterion = DistillationLoss(
         criterion, None, 'none', 0, 0
@@ -402,7 +401,7 @@ def main(args):
             args.clip_grad, model_ema, mixup_fn,
             set_training_mode=True,
         )
-        
+
         lr_scheduler.step(epoch)
         if args.output_dir:
             checkpoint_paths = [output_dir / 'checkpoint.pth']
@@ -434,8 +433,6 @@ def main(args):
                 y_true.extend(targets.cpu().numpy())
                 y_pred.extend(predicted.cpu().numpy())
                 y_score.extend(probabilities.cpu().numpy())
-            conf_matrix = get_confusion_matrix(model, data_loader_val, num_classes)
-            criterion = ConfusionAwareLoss(confusion_matrix=conf_matrix, temperature=1.0)
         y_score = np.array(y_score)
         metrics = calculate_metrics(y_true, y_pred, y_score)
         metrics_history.append(metrics)
