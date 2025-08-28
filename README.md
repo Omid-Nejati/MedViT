@@ -6,8 +6,8 @@
 This repo is the official implementation of MedViT: A Robust Vision Transformer for Generalized Medical Image Classification.
 
 ## 🔥 News
-Our MedViTV2 is availabe here [link](https://github.com/Omid-Nejati/MedViTV2)
-It includes a new corruption benchmark and improvements to our architecture through integration with the Kolmogorov–Arnold Networks (KAN).
+- **MedViT-V2** – [GitHub Link](https://github.com/Omid-Nejati/MedViTV2)  
+  Includes a new corruption benchmark and improvements to our architecture through integration with Kolmogorov–Arnold Networks (KAN).
   
 ## Train & Test --- Prepare data
 - (beginner friendly🍉) To train/evaluate MedViT on Cifar/Imagenet/CustomDataset follow ["CustomDataset"](https://github.com/Omid-Nejati/MedViT/blob/main/CustomDataset.md). 
